@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DataModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Guest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SeatNumber" Type="int" />
+          <Property Name="DietaryRequirements" Type="varchar(max)" />
+          <Property Name="SongRequest" Type="varchar(max)" />
+          <Property Name="RsvpStatusId" Type="int" Nullable="false" />
+          <Property Name="HouseholdId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IsChild" Type="bit" Nullable="false" />
+          <Property Name="HotelRequirementId" Type="int" Nullable="false" />
+          <Property Name="RequiresTransport" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HotelRequirement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Requirement" Type="char" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Household">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmailAddress" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RsvpStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Guest_ToHousehold">
+          <End Role="Household" Type="Self.Household" Multiplicity="1" />
+          <End Role="Guest" Type="Self.Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Household">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="HouseholdId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guest_ToRsvp">
+          <End Role="RsvpStatus" Type="Self.RsvpStatus" Multiplicity="1" />
+          <End Role="Guest" Type="Self.Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RsvpStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="RsvpStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DataModelsStoreContainer">
+          <EntitySet Name="Guest" EntityType="Self.Guest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HotelRequirement" EntityType="Self.HotelRequirement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Household" EntityType="Self.Household" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RsvpStatus" EntityType="Self.RsvpStatus" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Guest_ToHousehold" Association="Self.FK_Guest_ToHousehold">
+            <End Role="Household" EntitySet="Household" />
+            <End Role="Guest" EntitySet="Guest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guest_ToRsvp" Association="Self.FK_Guest_ToRsvp">
+            <End Role="RsvpStatus" EntitySet="RsvpStatus" />
+            <End Role="Guest" EntitySet="Guest" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Guest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeatNumber" Type="Int32" />
+          <Property Name="DietaryRequirements" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SongRequest" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RsvpStatusId" Type="Int32" Nullable="false" />
+          <Property Name="HouseholdId" Type="Guid" Nullable="false" />
+          <Property Name="IsChild" Type="Boolean" Nullable="false" />
+          <Property Name="HotelRequirementId" Type="Int32" Nullable="false" />
+          <Property Name="RequiresTransport" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Household" Relationship="Self.FK_Guest_ToHousehold" FromRole="Guest" ToRole="Household" />
+          <NavigationProperty Name="RsvpStatus" Relationship="Self.FK_Guest_ToRsvp" FromRole="Guest" ToRole="RsvpStatus" />
+        </EntityType>
+        <EntityType Name="HotelRequirement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Requirement" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Household">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Guest" Relationship="Self.FK_Guest_ToHousehold" FromRole="Household" ToRole="Guest" />
+        </EntityType>
+        <EntityType Name="RsvpStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Guest" Relationship="Self.FK_Guest_ToRsvp" FromRole="RsvpStatus" ToRole="Guest" />
+        </EntityType>
+        <Association Name="FK_Guest_ToHousehold">
+          <End Role="Household" Type="Self.Household" Multiplicity="1" />
+          <End Role="Guest" Type="Self.Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Household">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="HouseholdId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guest_ToRsvp">
+          <End Role="RsvpStatus" Type="Self.RsvpStatus" Multiplicity="1" />
+          <End Role="Guest" Type="Self.Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RsvpStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="RsvpStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GuestsDbContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Guest" EntityType="Self.Guest" />
+          <EntitySet Name="HotelRequirement" EntityType="Self.HotelRequirement" />
+          <EntitySet Name="Household" EntityType="Self.Household" />
+          <EntitySet Name="RsvpStatus" EntityType="Self.RsvpStatus" />
+          <AssociationSet Name="FK_Guest_ToHousehold" Association="Self.FK_Guest_ToHousehold">
+            <End Role="Household" EntitySet="Household" />
+            <End Role="Guest" EntitySet="Guest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guest_ToRsvp" Association="Self.FK_Guest_ToRsvp">
+            <End Role="RsvpStatus" EntitySet="RsvpStatus" />
+            <End Role="Guest" EntitySet="Guest" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DataModelsStoreContainer" CdmEntityContainer="GuestsDbContext">
+          <EntitySetMapping Name="Guest">
+            <EntityTypeMapping TypeName="DataModels.Guest">
+              <MappingFragment StoreEntitySet="Guest">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="SeatNumber" ColumnName="SeatNumber" />
+                <ScalarProperty Name="DietaryRequirements" ColumnName="DietaryRequirements" />
+                <ScalarProperty Name="SongRequest" ColumnName="SongRequest" />
+                <ScalarProperty Name="RsvpStatusId" ColumnName="RsvpStatusId" />
+                <ScalarProperty Name="HouseholdId" ColumnName="HouseholdId" />
+                <ScalarProperty Name="IsChild" ColumnName="IsChild" />
+                <ScalarProperty Name="HotelRequirementId" ColumnName="HotelRequirementId" />
+                <ScalarProperty Name="RequiresTransport" ColumnName="RequiresTransport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HotelRequirement">
+            <EntityTypeMapping TypeName="DataModels.HotelRequirement">
+              <MappingFragment StoreEntitySet="HotelRequirement">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Requirement" ColumnName="Requirement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Household">
+            <EntityTypeMapping TypeName="DataModels.Household">
+              <MappingFragment StoreEntitySet="Household">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RsvpStatus">
+            <EntityTypeMapping TypeName="DataModels.RsvpStatus">
+              <MappingFragment StoreEntitySet="RsvpStatus">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
