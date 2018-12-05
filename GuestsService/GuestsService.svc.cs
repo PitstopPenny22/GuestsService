@@ -84,5 +84,19 @@ namespace GuestsService
                 dbContext.SaveChanges();
             }
         }
+
+        public void MarkHouseholdAsInvited(Guid householdId)
+        {
+            using (var dbContext = new GuestsDbContext(_entityConnection))
+            {
+                var guestsInHousehold = dbContext.Guest.Where(g => g.HouseholdId == householdId);
+                foreach (var guest in guestsInHousehold)
+                {
+                    guest.RsvpStatusId = (int)RsvpOption.PendingReply;
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
     }
 }
